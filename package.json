@@ -1,0 +1,17 @@
+{
+  "name": "ai-voice-travel-agent",
+  "version": "1.0.0",
+  "description": "AI Voice Travel Agent for Brooklyn using OpenAI APIs",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "form-data": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
