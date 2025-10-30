@@ -313,18 +313,40 @@
                     
                     // Play the audio response
                     updateStatus('Playing response...');
-                    const audioResponse = new Audio(`data:audio/mp3;base64,${data.audioResponse}`);
+                    
+                    // Log for debugging
+                    console.log('Audio response received, length:', data.audioResponse?.length);
+                    
+                    if (!data.audioResponse) {
+                        throw new Error('No audio response received from server');
+                    }
+                    
+                    const audioResponse = new Audio(`data:audio/mpeg;base64,${data.audioResponse}`);
                     
                     audioResponse.onended = () => {
                         updateStatus('Ready! Click to ask another question');
                         document.getElementById('voiceButton').disabled = false;
                     };
                     
-                    audioResponse.onerror = () => {
-                        throw new Error('Error playing audio');
+                    audioResponse.onerror = (e) => {
+                        console.error('Audio playback error:', e);
+                        showError('Could not play audio. Check console for details.');
+                        updateStatus('Ready! Click to ask another question');
+                        document.getElementById('voiceButton').disabled = false;
                     };
                     
-                    await audioResponse.play();
+                    audioResponse.oncanplaythrough = () => {
+                        console.log('Audio ready to play');
+                    };
+                    
+                    try {
+                        await audioResponse.play();
+                        console.log('Audio playing...');
+                    } catch (playError) {
+                        console.error('Play error:', playError);
+                        showError('Audio play failed: ' + playError.message);
+                        document.getElementById('voiceButton').disabled = false;
+                    }
                 };
                 
             } catch (error) {
