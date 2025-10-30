@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Travel Agent - Brooklyn Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .voice-button {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 30px auto;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .voice-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .voice-button:active {
+            transform: scale(0.95);
+        }
+
+        .voice-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .voice-button.recording {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #666;
+            min-height: 24px;
+        }
+
+        .status.active {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .conversation {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+
+        .message.user {
+            background: #667eea;
+            color: white;
+            margin-left: 20%;
+        }
+
+        .message.ai {
+            background: white;
+            color: #333;
+            margin-right: 20%;
+            border: 1px solid #e0e0e0;
+        }
+
+        .error {
+            color: #f5576c;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .instructions {
+            background: #e8f4f8;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .voice-button {
+                width: 120px;
+                height: 120px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎙️ AI Voice Travel Agent</h1>
+        <p class="subtitle">Your Brooklyn Travel Guide - Ask me anything!</p>
+
+        <div class="instructions">
+            <strong>How to use:</strong><br>
+            1. Click the microphone button<br>
+            2. Ask about Brooklyn restaurants, events, neighborhoods, or attractions<br>
+            3. Listen to the AI's response!<br>
+            <br>
+            <strong>Example questions:</strong><br>
+            • "What are the best restaurants in Brooklyn?"<br>
+            • "Tell me about events this weekend"<br>
+            • "Which neighborhoods should I visit?"
+        </div>
+
+        <button class="voice-button" id="voiceButton" onclick="toggleRecording()">
+            🎤<br>Click to Talk
+        </button>
+
+        <div class="status" id="status">Ready! Click to start talking</div>
+        <div class="error" id="error"></div>
+
+        <div class="conversation" id="conversation" style="display: none;">
+            <!-- Messages will appear here -->
+        </div>
+    </div>
+
+    <script>
+        let isRecording = false;
+        let mediaRecorder;
+        let audioChunks = [];
+
+        function showError(message) {
+            document.getElementById('error').textContent = message;
+        }
+
+        function updateStatus(message, isActive = false) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = isActive ? 'status active' : 'status';
+        }
+
+        function addMessage(text, isUser) {
+            const conversation = document.getElementById('conversation');
+            conversation.style.display = 'block';
+            
+            const message = document.createElement('div');
+            message.className = `message ${isUser ? 'user' : 'ai'}`;
+            message.textContent = text;
+            
+            conversation.appendChild(message);
+            conversation.scrollTop = conversation.scrollHeight;
+        }
+
+        async function toggleRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    await processAudio(audioBlob);
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                
+                const button = document.getElementById('voiceButton');
+                button.classList.add('recording');
+                button.innerHTML = '⏹️<br>Stop';
+                
+                updateStatus('Listening... speak now!', true);
+                showError('');
+            } catch (error) {
+                showError('Microphone access denied. Please allow microphone access.');
+                console.error('Error accessing microphone:', error);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+            
+            isRecording = false;
+            const button = document.getElementById('voiceButton');
+            button.classList.remove('recording');
+            button.innerHTML = '🎤<br>Click to Talk';
+            
+            updateStatus('Processing your question...');
+        }
+
+        async function processAudio(audioBlob) {
+            try {
+                // Disable button during processing
+                document.getElementById('voiceButton').disabled = true;
+
+                // Convert audio blob to base64
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                
+                reader.onloadend = async () => {
+                    const base64Audio = reader.result.split(',')[1];
+                    
+                    // Send to backend API
+                    updateStatus('Processing your request...');
+                    
+                    const response = await fetch('/api/voice', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            audio: base64Audio,
+                            mimeType: audioBlob.type
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Server error');
+                    }
+
+                    const data = await response.json();
+                    
+                    // Display user's transcribed message
+                    addMessage(data.transcript, true);
+                    
+                    // Display AI response
+                    addMessage(data.aiResponse, false);
+                    
+                    // Play the audio response
+                    updateStatus('Playing response...');
+                    const audioResponse = new Audio(`data:audio/mp3;base64,${data.audioResponse}`);
+                    
+                    audioResponse.onended = () => {
+                        updateStatus('Ready! Click to ask another question');
+                        document.getElementById('voiceButton').disabled = false;
+                    };
+                    
+                    audioResponse.onerror = () => {
+                        throw new Error('Error playing audio');
+                    };
+                    
+                    await audioResponse.play();
+                };
+                
+            } catch (error) {
+                showError(`Error: ${error.message}`);
+                updateStatus('Ready to try again');
+                document.getElementById('voiceButton').disabled = false;
+                console.error('Processing error:', error);
+            }
+        }
+
+        // Check for microphone permissions on load
+        window.onload = () => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                showError('Your browser does not support audio recording');
+                document.getElementById('voiceButton').disabled = true;
+            }
+        };
+    </script>
+</body>
+</html>
