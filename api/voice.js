@@ -132,7 +132,8 @@ async function textToSpeech(text, apiKey) {
     body: JSON.stringify({
       model: 'tts-1',
       input: text,
-      voice: 'alloy'
+      voice: 'alloy',
+      response_format: 'mp3'
     })
   });
 
@@ -142,5 +143,7 @@ async function textToSpeech(text, apiKey) {
   }
 
   const audioBuffer = await response.arrayBuffer();
-  return Buffer.from(audioBuffer).toString('base64');
+  const base64Audio = Buffer.from(audioBuffer).toString('base64');
+  console.log('Audio generated, base64 length:', base64Audio.length);
+  return base64Audio;
 }
