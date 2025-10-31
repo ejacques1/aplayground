@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Voice Travel Agent with AI - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #FFD700 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            opacity: 0.95;
+        }
+
+        .author-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .author-info p {
+            margin: 5px 0;
+            font-size: 1.05em;
+        }
+
+        .author-info a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .author-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: #FFFACD;
+            border-left: 6px solid #FFD700;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 5px;
+        }
+
+        .toc h2 {
+            color: #000000;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .toc ol {
+            margin-left: 25px;
+        }
+
+        .toc li {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .toc a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            color: #FFD700;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            color: #000000;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .section h3 {
+            color: #1a1a1a;
+            font-size: 1.6em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section h4 {
+            color: #333333;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        /* Callout Boxes */
+        .callout {
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 5px;
+            border-left: 6px solid;
+        }
+
+        .callout-primary {
+            background-color: #000000;
+            color: #FFD700;
+            border-left-color: #FFD700;
+        }
+
+        .callout-secondary {
+            background-color: #FFFACD;
+            color: #000000;
+            border-left-color: #FFD700;
+        }
+
+        .callout-warning {
+            background-color: #FFD700;
+            color: #000000;
+            border-left-color: #000000;
+            font-weight: 600;
+        }
+
+        .callout h3, .callout h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .callout ul, .callout ol {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+
+        .callout li {
+            margin: 8px 0;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background-color: #1a1a1a;
+            color: #FFD700;
+            padding: 25px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 2px solid #FFD700;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin: 10px 0;
+            line-height: 1.7;
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            background-color: #f5f5f5;
+            border: 2px solid #FFD700;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .flow-step {
+            background-color: #FFD700;
+            color: #000000;
+            padding: 15px 25px;
+            margin: 10px auto;
+            max-width: 500px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #000000;
+            margin: 10px 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+        }
+
+        th {
+            background-color: #000000;
+            color: #FFD700;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #FFFACD;
+        }
+
+        /* Checklist */
+        .checklist {
+            background-color: #f9f9f9;
+            border: 2px solid #FFD700;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .checklist-item {
+            padding: 12px;
+            margin: 10px 0;
+            background-color: white;
+            border-left: 4px solid #FFD700;
+            border-radius: 3px;
+        }
+
+        /* Worksheet */
+        .worksheet {
+            background-color: #FFD700;
+            color: #000000;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+
+        .worksheet-field {
+            margin: 15px 0;
+            font-size: 1.05em;
+        }
+
+        .worksheet-field strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #FFD700 0%, #000000 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            margin-top: 60px;
+            border-radius: 8px;
+        }
+
+        .footer h2 {
+            color: white;
+            border: none;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .footer p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .header .subtitle {
+                font-size: 1.1em;
+            }
+
+            .section h2 {
+                font-size: 1.8em;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .footer {
+                background: none;
+                color: black;
+            }
+
+            .callout-primary {
+                border: 2px solid black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Complete Guide: Building a Voice Travel Agent with AI</h1>
+            <p class="subtitle">Step-by-Step Process from Setup to Deployment</p>
+            <div class="author-info">
+                <p><strong>Created by Dr. Erin Jacques</strong></p>
+                <p>Instagram & TikTok: <a href="https://www.instagram.com/dr.erinjacques">@dr.erinjacques</a></p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/drerinjacques/">linkedin.com/in/drerinjacques</a></p>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#what-it-does">What This Voice Agent Does</a></li>
+                <li><a href="#requirements">What You Need Before Starting</a></li>
+                <li><a href="#api-key">Getting Your API Key</a></li>
+                <li><a href="#files">Understanding Your Three Files</a></li>
+                <li><a href="#system-prompt">Creating Your Perfect System Prompt</a></li>
+                <li><a href="#deployment">Deploying to Vercel</a></li>
+                <li><a href="#troubleshooting">Complete Troubleshooting Guide</a></li>
+                <li><a href="#testing">Testing Your Agent</a></li>
+                <li><a href="#customization">Customizing for ANY Topic</a></li>
+            </ol>
+        </div>
+
+        <!-- Section 1: What It Does -->
+        <div class="section" id="what-it-does">
+            <h2>What This Voice Agent Does</h2>
+            
+            <div class="callout callout-primary">
+                <h3>This AI-Powered Voice Assistant:</h3>
+                <ul>
+                    <li><strong>Listens</strong> to users through their microphone</li>
+                    <li><strong>Converts speech to text</strong> using OpenAI's Whisper</li>
+                    <li><strong>Scrapes live information</strong> from your chosen websites</li>
+                    <li><strong>Generates smart responses</strong> using OpenAI's GPT-4 with that real-time data</li>
+                    <li><strong>Speaks the answer</strong> back using OpenAI's text-to-speech</li>
+                    <li><strong>All through a beautiful web interface</strong> users can access anywhere</li>
+                </ul>
+            </div>
+
+            <h3>The Flow</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">User speaks into microphone</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">Whisper API converts speech to text</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">System scrapes your chosen websites</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">GPT-4 API generates response with live data</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">TTS API converts response to speech</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">User hears the answer</div>
+            </div>
+        </div>
+
+        <!-- Section 2: Requirements -->
+        <div class="section" id="requirements">
+            <h2>What You Need Before Starting</h2>
+
+            <div class="callout callout-warning">
+                <strong>Important:</strong> You only need ONE API key for this entire project!
+            </div>
+
+            <h3>Required Accounts</h3>
+
+            <h4>1. OpenAI Account (The Only API Key You Need)</h4>
+            <div class="callout callout-secondary">
+                <p><strong>Sign up:</strong> <a href="https://platform.openai.com/signup">https://platform.openai.com/signup</a></p>
+                <p><strong>Add payment method:</strong> Required even for pay-as-you-go</p>
+                <p><strong>What you'll use it for:</strong></p>
+                <ul>
+                    <li>Whisper (speech-to-text)</li>
+                    <li>GPT-4 (AI brain that generates responses)</li>
+                    <li>TTS (text-to-speech)</li>
+                </ul>
+            </div>
+
+            <h4>2. Vercel Account (Free Hosting)</h4>
+            <p>Go to: <a href="https://vercel.com/signup">https://vercel.com/signup</a></p>
+            <p>Free tier available. This hosts your voice agent.</p>
+
+            <h4>3. GitHub Account (Code Storage)</h4>
+            <p>Go to: <a href="https://github.com/signup">https://github.com/signup</a></p>
+            <p>Free. This stores your files.</p>
+        </div>
+
+        <!-- Section 3: API Key -->
+        <div class="section" id="api-key">
+            <h2>Getting Your API Key</h2>
+
+            <h3>OpenAI API Key Setup</h3>
+            <div class="callout callout-primary">
+                <p><strong>Step 1:</strong> Go to <a href="https://platform.openai.com/api-keys" style="color: #FFD700;">https://platform.openai.com/api-keys</a></p>
+                <p><strong>Step 2:</strong> Click the green "Create new secret key" button</p>
+                <p><strong>Step 3:</strong> Give it a name like "Voice Travel Agent"</p>
+                <p><strong>Step 4:</strong> Copy the key (starts with <code>sk-proj-...</code>)</p>
+                <p><strong>Step 5:</strong> Save it somewhere safe - you can't see it again!</p>
+            </div>
+
+            <div class="callout callout-warning">
+                <strong>CRITICAL:</strong> Make sure you have a payment method added to your OpenAI account, or the API won't work!
+            </div>
+
+            <h4>To Add Payment Method:</h4>
+            <ul>
+                <li>Go to <a href="https://platform.openai.com/account/billing">https://platform.openai.com/account/billing</a></li>
+                <li>Click "Payment methods"</li>
+                <li>Add a credit card</li>
+            </ul>
+        </div>
+
+        <!-- Section 4: Files -->
+        <div class="section" id="files">
+            <h2>Understanding Your Three Files</h2>
+
+            <p>You have three code files that work together:</p>
+
+            <h3>File 1: The Frontend (HTML/CSS/JavaScript)</h3>
+            <div class="callout callout-secondary">
+                <h4>What it does:</h4>
+                <ul>
+                    <li>Shows the interface users see</li>
+                    <li>Has a microphone button they hold to speak</li>
+                    <li>Displays what they said and the AI's response</li>
+                    <li>Plays the audio response back to them</li>
+                </ul>
+                <h4>You customize:</h4>
+                <ul>
+                    <li>The title and header text</li>
+                    <li>Colors and styling</li>
+                    <li>Your branding and social media links</li>
+                </ul>
+            </div>
+
+            <h3>File 2: The Chat API (GPT-4 + Web Scraping)</h3>
+            <div class="callout callout-secondary">
+                <h4>What it does:</h4>
+                <ul>
+                    <li>Receives the user's question (as text from Whisper)</li>
+                    <li>Scrapes your chosen websites for fresh information</li>
+                    <li>Sends everything to GPT-4 with your system prompt</li>
+                    <li>Returns GPT-4's response</li>
+                </ul>
+                <h4>You customize:</h4>
+                <ul>
+                    <li>The URLs to scrape (your knowledge sources)</li>
+                    <li>The system prompt (GPT-4's personality and instructions)</li>
+                    <li>The keyword mapping (which URLs to use for which questions)</li>
+                </ul>
+            </div>
+
+            <h4>Current URLs Being Scraped (Brooklyn Example):</h4>
+            <ul>
+                <li>https://visitbrooklyn.nyc/</li>
+                <li>https://visitbrooklyn.nyc/neighborhoods</li>
+                <li>https://visitbrooklyn.nyc/shopping</li>
+                <li>https://www.downtownbrooklyn.com/events/</li>
+                <li>https://brooklynbridgepark.org/events/</li>
+                <li>And more...</li>
+            </ul>
+
+            <h3>File 3: The Other APIs (Whisper + TTS)</h3>
+            <div class="callout callout-secondary">
+                <h4>What they do:</h4>
+                <ul>
+                    <li>One receives audio from the user and sends it to Whisper to convert to text</li>
+                    <li>One receives GPT-4's text response and sends it to TTS to convert to audio</li>
+                </ul>
+                <h4>You customize:</h4>
+                <ul>
+                    <li>The voice (choose from 6 different voices)</li>
+                    <li>The speaking speed (slower for clarity, faster for energy)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 5: System Prompt -->
+        <div class="section" id="system-prompt">
+            <h2>Creating Your Perfect System Prompt</h2>
+
+            <div class="callout callout-warning">
+                <strong>This is THE MOST IMPORTANT part</strong> - it's what makes your voice agent unique!
+            </div>
+
+            <h3>What is a System Prompt?</h3>
+            <p>The system prompt tells GPT-4:</p>
+            <ul>
+                <li><strong>WHO</strong> it is (role/personality)</li>
+                <li><strong>HOW</strong> to respond (tone, length, style)</li>
+                <li><strong>WHAT</strong> to focus on (priorities)</li>
+                <li><strong>HOW</strong> to handle uncertainty (what to do when it doesn't know)</li>
+            </ul>
+
+            <h3>Your Current Brooklyn Guide Prompt</h3>
+            <div class="code-block">
+<pre>You are a knowledgeable and enthusiastic Brooklyn travel guide. 
+Your goal is to help visitors discover the best of Brooklyn - from 
+trendy neighborhoods and delicious dining spots to exciting events 
+and hidden gems.
+
+IMPORTANT GUIDELINES:
+- Be conversational, friendly, and enthusiastic about Brooklyn
+- Keep responses concise (2-3 sentences max) since they will be 
+  converted to speech
+- Provide specific recommendations when possible
+- If you don't have current information, acknowledge it and provide 
+  general guidance
+- Focus on the most relevant information from the context provided
+
+CURRENT BROOKLYN INFORMATION:
+[This is where the scraped website content gets inserted automatically]
+
+Remember: You're speaking to someone who wants quick, helpful, and 
+engaging information about Brooklyn. Be their friendly local guide!</pre>
+            </div>
+
+            <h3>The Universal Template for ANY Topic</h3>
+            <div class="code-block">
+<pre>You are a [ADJECTIVE] [ROLE] for [TOPIC/LOCATION].
+
+IMPORTANT GUIDELINES:
+- TONE: Be [describe tone - conversational/professional/energetic/calming/etc.]
+- LENGTH: Keep responses to [2-4] sentences since they will be converted to speech
+- SPECIFICITY: [Provide specific names and recommendations / Give general overviews / 
+  Focus on unique features]
+- UNCERTAINTY: If you don't have current information, [acknowledge it honestly / 
+  provide general insights / suggest alternatives]
+- FOCUS: Prioritize [what matters most - price/quality/convenience/experience/etc.]
+
+CURRENT [TOPIC] INFORMATION:
+[Scraped content goes here automatically]
+
+Remember: You're helping someone [their goal]. Be their [relationship to them]!</pre>
+            </div>
+
+            <h3>Real Examples for Different Industries</h3>
+
+            <h4>Example 1: Miami Real Estate Agent</h4>
+            <div class="code-block">
+<pre>You are a professional and trustworthy real estate advisor for Miami, Florida.
+
+IMPORTANT GUIDELINES:
+- TONE: Be professional yet approachable and informative
+- LENGTH: Keep responses to 3-4 sentences for voice clarity
+- SPECIFICITY: Always mention specific neighborhoods, price ranges, and property features
+- UNCERTAINTY: If you lack current market data, provide general Miami market insights
+- FOCUS: Prioritize helping buyers and sellers make informed financial decisions
+
+CURRENT MIAMI REAL ESTATE INFORMATION:
+[Scraped content]
+
+Remember: You're guiding someone through one of the biggest financial decisions 
+of their life. Be accurate, helpful, and trustworthy!</pre>
+            </div>
+
+            <h4>Example 2: Los Angeles Fitness & Wellness Guide</h4>
+            <div class="code-block">
+<pre>You are an energetic and motivating fitness coach and wellness expert for Los Angeles.
+
+IMPORTANT GUIDELINES:
+- TONE: Be upbeat, positive, and encouraging with high energy
+- LENGTH: Keep responses to 2-3 sentences since they'll be spoken aloud
+- SPECIFICITY: Recommend specific gyms, studios, trails, and wellness spots by name
+- UNCERTAINTY: If you don't have current class schedules, suggest general fitness options
+- FOCUS: Prioritize variety - yoga studios, hiking trails, boutique fitness, outdoor activities
+
+CURRENT LA FITNESS & WELLNESS INFORMATION:
+[Scraped content]
+
+Remember: You're inspiring someone to prioritize their health. 
+Be their motivational fitness buddy!</pre>
+            </div>
+
+            <h4>Example 3: Austin Food Truck Guide</h4>
+            <div class="code-block">
+<pre>You are a passionate and enthusiastic food expert specializing in Austin's food truck scene.
+
+IMPORTANT GUIDELINES:
+- TONE: Be excited, descriptive, and fun when talking about food
+- LENGTH: Keep responses to 3-4 sentences for speech conversion
+- SPECIFICITY: Always mention specific truck names, locations, and signature dishes
+- UNCERTAINTY: If you don't have current menus, focus on the truck's style and specialties
+- FOCUS: Prioritize unique flavors, must-try dishes, and trucks that capture Austin's culture
+
+CURRENT AUSTIN FOOD TRUCK INFORMATION:
+[Scraped content]
+
+Remember: You're helping someone discover their next amazing meal on wheels. 
+Make them hungry!</pre>
+            </div>
+
+            <h3>How to Test Your System Prompt</h3>
+            <div class="callout callout-secondary">
+                <p>After you create your prompt, test it with these 4 types of questions:</p>
+                <ol>
+                    <li><strong>Specific Question:</strong> "What's the best pizza place in [location]?"<br>
+                        Tests if it gives specific recommendations</li>
+                    <li><strong>Broad Question:</strong> "What should I do today?"<br>
+                        Tests if responses are concise enough for speech</li>
+                    <li><strong>Unknown Information:</strong> "What are the hours for [obscure place]?"<br>
+                        Tests how it handles uncertainty</li>
+                    <li><strong>Comparison Question:</strong> "What's better, X or Y?"<br>
+                        Tests if it provides helpful guidance</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Section 6: Deployment -->
+        <div class="section" id="deployment">
+            <h2>Deploying to Vercel</h2>
+
+            <h3>Step 1: Push Your Files to GitHub</h3>
+            <ol>
+                <li>Create a new repository on GitHub</li>
+                <li>Upload your three files</li>
+                <li>Commit the changes</li>
+            </ol>
+
+            <h3>Step 2: Connect Vercel to GitHub</h3>
+            <div class="callout callout-secondary">
+                <ol>
+                    <li>Go to <a href="https://vercel.com/dashboard">https://vercel.com/dashboard</a></li>
+                    <li>Click "Add New" → "Project"</li>
+                    <li>Click "Import Git Repository"</li>
+                    <li>Select your GitHub repository</li>
+                    <li>Vercel will auto-detect your settings</li>
+                </ol>
+            </div>
+
+            <h3>Step 3: Add Your API Key to Vercel</h3>
+            <div class="callout callout-warning">
+                <strong>CRITICAL STEP - Don't Skip This!</strong>
+            </div>
+
+            <div class="callout callout-primary">
+                <ol>
+                    <li>In your Vercel project, click "Settings"</li>
+                    <li>Click "Environment Variables" on the left</li>
+                    <li>Add your API key:
+                        <ul>
+                            <li><strong>Name:</strong> <code>OPENAI_API_KEY</code></li>
+                            <li><strong>Value:</strong> Paste your OpenAI key (starts with sk-proj-)</li>
+                            <li><strong>Environments:</strong> Check all three boxes (Production, Preview, Development)</li>
+                            <li>Click "Save"</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Step 4: Deploy</h3>
+            <div class="callout callout-secondary">
+                <ol>
+                    <li>Click "Deploy" in Vercel</li>
+                    <li>Wait 1-2 minutes for deployment</li>
+                    <li>Vercel gives you a URL like: <code>your-project-name.vercel.app</code></li>
+                    <li>Click the URL to test your voice agent!</li>
+                </ol>
+            </div>
+
+            <h3>Step 5: Every Time You Update Your Files</h3>
+            <div class="callout callout-warning">
+                <ol>
+                    <li>Push changes to GitHub</li>
+                    <li>Vercel automatically redeploys</li>
+                    <li>Your live site updates in 1-2 minutes</li>
+                </ol>
+                <p><strong>That's it - no manual redeployment needed!</strong></p>
+            </div>
+        </div>
+
+        <!-- Section 7: Troubleshooting -->
+        <div class="section" id="troubleshooting">
+            <h2>Complete Troubleshooting Guide</h2>
+
+            <h3>Problem 1: Microphone Doesn't Work</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> Button doesn't respond or browser doesn't ask for permission</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Make sure you're using HTTPS (Vercel provides this automatically)</li>
+                    <li>Check your browser settings:
+                        <ul>
+                            <li><strong>Chrome:</strong> Visit <code>chrome://settings/content/microphone</code> and allow access</li>
+                            <li><strong>Safari:</strong> Go to Safari → Settings → Websites → Microphone</li>
+                            <li><strong>Firefox:</strong> Check <code>about:permissions</code></li>
+                        </ul>
+                    </li>
+                    <li>Try a different browser</li>
+                    <li>Check if another app is using your microphone</li>
+                    <li>Restart your browser</li>
+                </ol>
+            </div>
+
+            <h3>Problem 2: "401 Unauthorized" Error</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> Nothing happens after speaking, or you see error messages</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Check your API key is correctly entered in Vercel:
+                        <ul>
+                            <li>Go to Vercel → Your Project → Settings → Environment Variables</li>
+                            <li>Verify <code>OPENAI_API_KEY</code> is correct</li>
+                        </ul>
+                    </li>
+                    <li>Make sure your OpenAI account has a payment method:
+                        <ul>
+                            <li>Go to <a href="https://platform.openai.com/account/billing">https://platform.openai.com/account/billing</a></li>
+                            <li>Add a credit card even for pay-as-you-go</li>
+                        </ul>
+                    </li>
+                    <li>Regenerate your key if needed:
+                        <ul>
+                            <li>Create a new key on OpenAI platform</li>
+                            <li>Update it in Vercel</li>
+                            <li>Redeploy</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Problem 3: "429 Too Many Requests"</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> Works a few times, then stops working</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>You're hitting rate limits - wait 60 seconds and try again</li>
+                    <li>Check your usage tier at <a href="https://platform.openai.com/account/limits">https://platform.openai.com/account/limits</a></li>
+                    <li>If testing a lot, space out your requests by 10-15 seconds</li>
+                    <li>Consider upgrading your OpenAI account tier for higher limits</li>
+                </ol>
+            </div>
+
+            <h3>Problem 4: No Audio Plays Back</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> You see the text response but don't hear anything</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Check your device volume</li>
+                    <li>Look for a "Click to play" button (some browsers block autoplay)</li>
+                    <li>Try a different browser (Safari sometimes has issues)</li>
+                    <li>Check browser console for errors (F12 key → Console tab)</li>
+                    <li>Make sure your OpenAI API key is working</li>
+                </ol>
+            </div>
+
+            <h3>Problem 5: Empty or Generic Responses</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> GPT-4 gives generic answers or says it doesn't know anything</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Check if your websites are being scraped correctly</li>
+                    <li>Your websites might be blocking scrapers - try different URLs</li>
+                    <li>Reduce the number of URLs you're scraping (max 3 at a time)</li>
+                    <li>Make sure the websites you're scraping have actual text content (not just images)</li>
+                    <li>Add fallback text in your code for when scraping fails</li>
+                </ol>
+            </div>
+
+            <h3>Problem 6: "Function Timeout" Error</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> Request takes too long and fails</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Reduce the number of websites you're scraping (stick to 2-3)</li>
+                    <li>Choose faster-loading websites</li>
+                    <li>Your Vercel free plan has a 10-second limit</li>
+                    <li>Upgrade to Vercel Pro for 60-second timeout</li>
+                    <li>Optimize your scraping to only grab essential text</li>
+                </ol>
+            </div>
+
+            <h3>Problem 7: Website Scraping Fails</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> Agent works but gives generic answers without recent info</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Check if the websites allow scraping:
+                        <ul>
+                            <li>Visit <code>https://yourwebsite.com/robots.txt</code></li>
+                            <li>Look for "Disallow" rules</li>
+                        </ul>
+                    </li>
+                    <li>Some websites block automated access:
+                        <ul>
+                            <li>Try alternative websites on the same topic</li>
+                            <li>Use official APIs if available</li>
+                        </ul>
+                    </li>
+                    <li>Test individual URLs:
+                        <ul>
+                            <li>Remove all but one URL</li>
+                            <li>See if that one works</li>
+                            <li>Add URLs back one at a time</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Problem 8: Deployment Fails</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> Vercel shows "Build Failed" error</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Check the error logs in Vercel:
+                        <ul>
+                            <li>Go to your project → Deployments</li>
+                            <li>Click the failed deployment</li>
+                            <li>Read the error message</li>
+                        </ul>
+                    </li>
+                    <li>Common issues:
+                        <ul>
+                            <li>Missing files - make sure all three files are uploaded</li>
+                            <li>Wrong file names - check spelling exactly</li>
+                            <li>Node version - Vercel uses Node 18+ by default</li>
+                        </ul>
+                    </li>
+                    <li>Redeploy:
+                        <ul>
+                            <li>Make a small change in GitHub (add a space, etc.)</li>
+                            <li>Push the change</li>
+                            <li>Vercel will try again</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Problem 9: Environment Variables Not Loading</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> Key doesn't work even though it's correct</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Verify variable name is EXACT: <code>OPENAI_API_KEY</code> not <code>openai_api_key</code> or <code>OPENAI_KEY</code></li>
+                    <li>Check all environments are selected:
+                        <ul>
+                            <li>Production ✓</li>
+                            <li>Preview ✓</li>
+                            <li>Development ✓</li>
+                        </ul>
+                    </li>
+                    <li>After adding/changing variables, you MUST redeploy:
+                        <ul>
+                            <li>Go to Deployments</li>
+                            <li>Click "..." menu on latest deployment</li>
+                            <li>Click "Redeploy"</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Problem 10: Audio Quality Issues</h3>
+            <div class="callout callout-secondary">
+                <p><strong>Symptom:</strong> Voice sounds robotic or unclear</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                    <li>Change the voice in your TTS settings:
+                        <ul>
+                            <li>Options: <code>alloy</code>, <code>echo</code>, <code>fable</code>, <code>onyx</code>, <code>nova</code>, <code>shimmer</code></li>
+                            <li>Try <code>nova</code> for friendly, <code>onyx</code> for professional</li>
+                        </ul>
+                    </li>
+                    <li>Adjust speaking speed:
+                        <ul>
+                            <li>Default is <code>1.0</code></li>
+                            <li>Try <code>0.9</code> for clearer speech</li>
+                            <li>Try <code>1.1</code> for more energy</li>
+                        </ul>
+                    </li>
+                    <li>Keep GPT-4's responses short (2-3 sentences):
+                        <ul>
+                            <li>Long responses are harder to listen to</li>
+                            <li>Edit your system prompt to enforce brevity</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Section 8: Testing -->
+        <div class="section" id="testing">
+            <h2>Testing Your Agent</h2>
+
+            <h3>Pre-Launch Checklist</h3>
+            <div class="checklist">
+                <div class="checklist-item">
+                    <strong>Test on Desktop:</strong>
+                    <ol>
+                        <li>Open your Vercel URL</li>
+                        <li>Click the microphone button</li>
+                        <li>Say: "What are the best restaurants?"</li>
+                        <li>Check if you get a response with audio</li>
+                    </ol>
+                </div>
+
+                <div class="checklist-item">
+                    <strong>Test on Mobile:</strong>
+                    <ol>
+                        <li>Open URL on your phone</li>
+                        <li>Test the microphone (may need to tap "Allow")</li>
+                        <li>Make sure audio plays back</li>
+                    </ol>
+                </div>
+
+                <div class="checklist-item">
+                    <strong>Test Different Questions:</strong>
+                    <ol>
+                        <li>Ask about events</li>
+                        <li>Ask about specific neighborhoods</li>
+                        <li>Ask for recommendations</li>
+                        <li>Ask something obscure (test how it handles uncertainty)</li>
+                    </ol>
+                </div>
+
+                <div class="checklist-item">
+                    <strong>Test Error Handling:</strong>
+                    <ol>
+                        <li>Try clicking the button without speaking</li>
+                        <li>Try speaking too quietly</li>
+                        <li>Try asking in a noisy environment</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Questions to Test With</h3>
+            <div class="callout callout-secondary">
+                <h4>For Brooklyn Guide:</h4>
+                <ul>
+                    <li>"What are fun things to do today?"</li>
+                    <li>"Best pizza in Brooklyn?"</li>
+                    <li>"Tell me about Williamsburg"</li>
+                    <li>"Any events this weekend?"</li>
+                    <li>"Where should I go shopping?"</li>
+                </ul>
+
+                <h4>For Your Custom Agent:</h4>
+                <p>Create 5-10 test questions that real users would ask.</p>
+            </div>
+        </div>
+
+        <!-- Section 9: Customization -->
+        <div class="section" id="customization">
+            <h2>Customizing for ANY Topic</h2>
+
+            <h3>Step-by-Step Customization Process</h3>
+
+            <h4>Step 1: Choose Your Topic</h4>
+            <div class="callout callout-secondary">
+                <ul>
+                    <li><strong>Location-based:</strong> [City] restaurants, [City] real estate, [City] attractions</li>
+                    <li><strong>Interest-based:</strong> Fitness, music venues, coffee shops, hiking trails</li>
+                    <li><strong>Service-based:</strong> Home services, event planning, travel tips</li>
+                </ul>
+            </div>
+
+            <h4>Step 2: Find 5-10 Websites with Good Information</h4>
+            <div class="callout callout-warning">
+                <strong>What makes a good website:</strong>
+                <ul>
+                    <li>Has current, updated information</li>
+                    <li>Lots of text content (not just images)</li>
+                    <li>Loads quickly</li>
+                    <li>Covers your topic well</li>
+                    <li>Allows scraping (check robots.txt)</li>
+                </ul>
+                <strong>Where to find them:</strong>
+                <ul>
+                    <li>Official tourism sites</li>
+                    <li>Local government sites</li>
+                    <li>Review sites (Yelp, TripAdvisor)</li>
+                    <li>Event calendars</li>
+                    <li>Local blogs and magazines</li>
+                </ul>
+            </div>
+
+            <h4>Step 3: Map Keywords to URLs</h4>
+            <div class="callout callout-secondary">
+                <p>Think about what people will ask, then decide which websites have those answers.</p>
+                <p><strong>Example for Food Guide:</strong></p>
+                <ul>
+                    <li>User says "restaurant" or "dining" → Use Yelp and local food blogs</li>
+                    <li>User says "events" or "festivals" → Use event calendar sites</li>
+                    <li>User says "cheap eats" → Use budget dining guides</li>
+                </ul>
+            </div>
+
+            <h4>Step 4: Write Your System Prompt</h4>
+            <p>Use the template from earlier and fill in:</p>
+            <ol>
+                <li>The role (guide, advisor, expert, coach)</li>
+                <li>The tone (friendly, professional, energetic)</li>
+                <li>Response length (2-3 sentences usually best)</li>
+                <li>What to focus on (price, experience, quality, convenience)</li>
+                <li>How to handle unknowns</li>
+            </ol>
+
+            <h4>Step 5: Choose Your Voice</h4>
+            <div class="callout callout-primary">
+                <h4>Voice Personalities:</h4>
+                <table>
+                    <tr>
+                        <th>Voice</th>
+                        <th>Personality</th>
+                        <th>Best For</th>
+                    </tr>
+                    <tr>
+                        <td><code>nova</code></td>
+                        <td>Friendly and energetic</td>
+                        <td>Travel, lifestyle</td>
+                    </tr>
+                    <tr>
+                        <td><code>alloy</code></td>
+                        <td>Neutral and balanced</td>
+                        <td>Good for anything</td>
+                    </tr>
+                    <tr>
+                        <td><code>echo</code></td>
+                        <td>Clear and direct</td>
+                        <td>Instructions</td>
+                    </tr>
+                    <tr>
+                        <td><code>fable</code></td>
+                        <td>Warm and expressive</td>
+                        <td>Stories</td>
+                    </tr>
+                    <tr>
+                        <td><code>onyx</code></td>
+                        <td>Deep and authoritative</td>
+                        <td>Professional topics</td>
+                    </tr>
+                    <tr>
+                        <td><code>shimmer</code></td>
+                        <td>Soft and calming</td>
+                        <td>Wellness</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h4>Step 6: Update Your Frontend Text</h4>
+            <p>Change these in your HTML:</p>
+            <ul>
+                <li>Page title</li>
+                <li>Header text ("Brooklyn Voice Travel Guide" → "Your Custom Title")</li>
+                <li>Description</li>
+                <li>Footer with your social media</li>
+            </ul>
+
+            <h4>Step 7: Test Everything</h4>
+            <p>Run through the testing checklist above!</p>
+
+            <h3>Quick Customization Worksheet</h3>
+            <div class="worksheet">
+                <div class="worksheet-field">
+                    <strong>My Voice Agent Topic:</strong>
+                    <p>_______________________________________</p>
+                </div>
+                <div class="worksheet-field">
+                    <strong>My Target Audience:</strong>
+                    <p>_______________________________________</p>
+                </div>
+                <div class="worksheet-field">
+                    <strong>5-10 Websites I'll Scrape:</strong>
+                    <ol>
+                        <li>_______________________________________</li>
+                        <li>_______________________________________</li>
+                        <li>_______________________________________</li>
+                        <li>_______________________________________</li>
+                        <li>_______________________________________</li>
+                    </ol>
+                </div>
+                <div class="worksheet-field">
+                    <strong>Keywords People Will Use:</strong>
+                    <ul>
+                        <li>_____________ → URLs: _____________</li>
+                        <li>_____________ → URLs: _____________</li>
+                        <li>_____________ → URLs: _____________</li>
+                    </ul>
+                </div>
+                <div class="worksheet-field">
+                    <strong>My Agent's Personality (3 words):</strong>
+                    <p>_____________, _____________, _____________</p>
+                </div>
+                <div class="worksheet-field">
+                    <strong>Response Length:</strong>
+                    <p>_____ sentences</p>
+                </div>
+                <div class="worksheet-field">
+                    <strong>TTS Voice Choice:</strong>
+                    <p>_______________________________________</p>
+                </div>
+                <div class="worksheet-field">
+                    <strong>Main Focus/Priority:</strong>
+                    <p>_______________________________________</p>
+                </div>
+            </div>
+
+            <h3>Real Customization Examples</h3>
+
+            <h4>Example 1: San Francisco Coffee Shop Guide</h4>
+            <div class="callout callout-secondary">
+                <p><strong>Topic:</strong> SF Coffee Shops</p>
+                <p><strong>Audience:</strong> Coffee lovers and remote workers</p>
+                <p><strong>Websites:</strong></p>
+                <ul>
+                    <li>https://www.sfgate.com/food/article/best-coffee-shops-san-francisco</li>
+                    <li>https://sf.eater.com/maps/best-coffee-shops-san-francisco</li>
+                    <li>https://www.timeout.com/san-francisco/restaurants/best-coffee-shops-in-san-francisco</li>
+                </ul>
+                <p><strong>Voice:</strong> <code>nova</code> (friendly and energetic)</p>
+            </div>
+
+            <h4>Example 2: Denver Hiking Guide</h4>
+            <div class="callout callout-secondary">
+                <p><strong>Topic:</strong> Denver Area Hiking Trails</p>
+                <p><strong>Audience:</strong> Outdoor enthusiasts and tourists</p>
+                <p><strong>Websites:</strong></p>
+                <ul>
+                    <li>https://www.alltrails.com/us/colorado/denver</li>
+                    <li>https://www.denver.org/things-to-do/sports-recreation/hiking/</li>
+                    <li>https://www.uncovercolorado.com/best-hikes-near-denver/</li>
+                </ul>
+                <p><strong>Voice:</strong> <code>fable</code> (warm and expressive)</p>
+            </div>
+        </div>
+
+        <!-- What to Do Next Section -->
+        <div class="section">
+            <h2>What to Do Next</h2>
+
+            <h3>Launch Checklist</h3>
+            <div class="checklist">
+                <div class="checklist-item">
+                    <strong>Before Public Launch:</strong>
+                    <ol>
+                        <li>Test on 3+ different devices</li>
+                        <li>Test with 10+ different questions</li>
+                        <li>Ask friends to test it</li>
+                        <li>Check your API key is working</li>
+                        <li>Verify environment variables in Vercel</li>
+                        <li>Make sure your branding is correct</li>
+                    </ol>
+                </div>
+
+                <div class="checklist-item">
+                    <strong>After Launch:</strong>
+                    <ol>
+                        <li>Monitor your API usage (check costs)</li>
+                        <li>Read the Vercel logs for errors</li>
+                        <li>Get user feedback</li>
+                        <li>Iterate on your system prompt based on responses</li>
+                    </ol>
+                </div>
+
+                <div class="checklist-item">
+                    <strong>Share Your Work:</strong>
+                    <ol>
+                        <li>Post on Instagram/TikTok: @dr.erinjacques</li>
+                        <li>Share your Vercel URL</li>
+                        <li>Tag Dr. Erin Jacques!</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Monitoring Costs</h3>
+            <div class="callout callout-secondary">
+                <h4>OpenAI Usage:</h4>
+                <ul>
+                    <li>Check usage: <a href="https://platform.openai.com/usage">https://platform.openai.com/usage</a></li>
+                    <li>Whisper: ~$0.006 per minute of audio</li>
+                    <li>GPT-4: ~$0.01 per 1000 input tokens, ~$0.03 per 1000 output tokens</li>
+                    <li>TTS: ~$0.015 per 1000 characters</li>
+                </ul>
+
+                <h4>Estimated Cost Per Interaction:</h4>
+                <ul>
+                    <li>~$0.02-0.04 per user interaction</li>
+                    <li>100 users per day = ~$2-4/day</li>
+                </ul>
+
+                <h4>Tips to Reduce Costs:</h4>
+                <ol>
+                    <li>Keep responses short</li>
+                    <li>Limit scraping to 2-3 URLs</li>
+                    <li>Use GPT-3.5 instead of GPT-4 for cheaper option</li>
+                    <li>Cache scraped data for 1 hour</li>
+                </ol>
+            </div>
+
+            <h3>Getting Help</h3>
+            <div class="callout callout-primary">
+                <h4>Official Documentation:</h4>
+                <ul>
+                    <li>OpenAI: <a href="https://platform.openai.com/docs" style="color: #FFD700;">https://platform.openai.com/docs</a></li>
+                    <li>Vercel: <a href="https://vercel.com/docs" style="color: #FFD700;">https://vercel.com/docs</a></li>
+                </ul>
+
+                <h4>Common Issues:</h4>
+                <ul>
+                    <li>Re-read the troubleshooting section above</li>
+                    <li>Check Vercel deployment logs</li>
+                    <li>Verify API key is correct</li>
+                    <li>Test each component separately</li>
+                </ul>
+
+                <h4>Connect with Dr. Erin Jacques:</h4>
+                <ul>
+                    <li>Instagram: <a href="https://www.instagram.com/dr.erinjacques" style="color: #FFD700;">@dr.erinjacques</a></li>
+                    <li>TikTok: <a href="https://www.tiktok.com/@dr.erinjacques" style="color: #FFD700;">@dr.erinjacques</a></li>
+                    <li>LinkedIn: <a href="https://www.linkedin.com/in/drerinjacques/" style="color: #FFD700;">linkedin.com/in/drerinjacques</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Final Tips Section -->
+        <div class="section">
+            <h2>Final Tips for Success</h2>
+
+            <div class="callout callout-warning">
+                <ol>
+                    <li><strong>Start Simple:</strong> Get the basic version working before adding complex features</li>
+                    <li><strong>Test Constantly:</strong> After every change, test your agent</li>
+                    <li><strong>Keep Responses Short:</strong> 2-3 sentences work best for voice</li>
+                    <li><strong>Pick the Right Voice:</strong> The voice makes a huge difference in user experience</li>
+                    <li><strong>Monitor Your Costs:</strong> Check your API usage weekly</li>
+                    <li><strong>Update Your Content:</strong> Change your scraped URLs if information gets stale</li>
+                    <li><strong>Listen to Users:</strong> Their questions will help you improve your system prompt</li>
+                    <li><strong>Be Patient:</strong> Getting the system prompt perfect takes iteration</li>
+                    <li><strong>Share Your Work:</strong> Tag @dr.erinjacques when you launch!</li>
+                    <li><strong>Have Fun:</strong> This is YOUR voice agent - make it unique!</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h2>Congratulations!</h2>
+            <p><strong>You now have everything you need to build and deploy an AI voice agent!</strong></p>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(255,255,255,0.3);">
+                <p><em>Guide created by Dr. Erin Jacques</em></p>
+                <p><em>Follow for more AI tutorials:</em></p>
+                <p><em>@dr.erinjacques on Instagram, TikTok, and LinkedIn</em></p>
+                <p style="margin-top: 20px;"><em>Last updated: October 2024</em></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
